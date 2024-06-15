@@ -22,4 +22,5 @@ Route::post('/usuario', [UsuarioController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/trabajador', TrabajadorController::class);
     Route::resource('/sucursales', SucursalController::class);
+    Route::get('/usuario', [UsuarioController::class, 'index']);
 });

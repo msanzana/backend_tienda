@@ -37,10 +37,16 @@ class Sucursales extends Model
             return $query->where('region','LIKE','%'.$region.'%');
         }
     }
+    public function scopeActivo($query, $activo)
+    {
+        if(!is_null($activo))
+        {
+            return $query->where('region','=',$activo);
+        }
+    }
     // relaciones
     public function trabajadores()
     {
-        return $this->belongsToMany('App\Models\Trabajadores','sucursales_has_trabajadores')
-               ->withPivot('scursal_id');
+        return $this->belongsToMany('App\Models\Trabajadores','sucursales_has_trabajadores','sucursal_id','trabajador_id');
     }
 }

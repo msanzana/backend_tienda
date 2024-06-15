@@ -18,6 +18,7 @@ class TrabajadorController extends Controller
         $trabajador = Trabajadores::with('sucursalesHasTrabajadores')
                                     ->id($request->id)
                                     ->nombre($request->nombre)
+                                    ->admin($request->admin)
                                     ->get();
         return $trabajador;
     }
@@ -90,6 +91,7 @@ class TrabajadorController extends Controller
                 DB::beginTransaction();
                 $trabajador = Trabajadores::where('id','=',$id)->first();
                 $trabajador->nombre = $request->nombre;
+                $trabajador->admin = $request->admin;
                 $trabajador->save();
                 if(isset($request->sucursal))
                 {

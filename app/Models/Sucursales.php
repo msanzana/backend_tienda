@@ -12,7 +12,8 @@ class Sucursales extends Model
     protected $primaryKey = 'id';
     protected $fillable =['id',
                           'nombre',
-                          'region'];
+                          'region',
+                          'activo'];
     public $timestamps = false;
     public function scopeId($query, $id)
     {

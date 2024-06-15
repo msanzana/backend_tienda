@@ -57,10 +57,14 @@ class TrabajadorController extends Controller
                 }
                 $filtro = request::create('/trabajador','GET',[
                     'id'     =>  $trabajadorId,
-                    'nombre' => null
+                    'nombre' => null,
+                    'admin'  => null    
                 ]);
                 DB::commit();
-                return $this->index((object)$filtro);
+                return response([
+                    'mensaje'   => 'Trabajador creado',
+                    'data'      =>  $this->index($filtro)
+                ],200);
             } catch (\Throwable $th) {
                 DB::rollBack();
                 throw $th;
@@ -107,10 +111,14 @@ class TrabajadorController extends Controller
                 }
                 $filtro = request::create('/trabajador','GET',[
                     'id'     =>  $id,
-                    'nombre' => null
+                    'nombre' => null,
+                    'admin'  => null        
                 ]);
                 DB::commit();
-                return $this->index((object)$filtro);
+                return response([
+                    'mensaje'   => 'trabaador modificado',
+                    'data'      =>  $this->index($filtro)
+                ],200);
             } catch (\Throwable $th) {
                 DB::rollBack();
                 throw $th;

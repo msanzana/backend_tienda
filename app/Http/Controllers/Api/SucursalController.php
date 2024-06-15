@@ -30,7 +30,15 @@ class SucursalController extends Controller
             $sucursal->region = $request->region;
             $sucursal->activo = 1;
             $sucursal->save();
+            $sucursalId = $sucursal->id;
+            $filtro = new Request([
+                'id'     =>  $sucursalId
+            ]);
             DB::commit();
+            return response([
+                'mensaje'   => 'Sucursal creada',
+                'data'      =>  $this->index($filtro)
+            ]);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;
@@ -47,7 +55,17 @@ class SucursalController extends Controller
             $sucursal->region = $request->region;
             $sucursal->activo = $request->activo;
             $sucursal->save();
+            $filtro = request::create('/sucursales','GET',[
+                'id'     =>  $id,
+                'nombre' => null,
+                'region' => null,
+                'activo' => null    
+            ]);
             DB::commit();
+            return response([
+                'mensaje'   => 'Sucursal Modificada',
+                'data'      =>  $this->index($filtro)
+            ]);
         } catch (Exception $e) {
             DB::rollback();
             throw $e;

@@ -37,4 +37,10 @@ class Sucursales extends Model
             return $query->where('region','LIKE','%'.$region.'%');
         }
     }
+    // relaciones
+    public function trabajadores()
+    {
+        return $this->belongsToMany('App\Models\Trabajadores','sucursales_has_trabajadores')
+               ->withPivot('scursal_id');
+    }
 }

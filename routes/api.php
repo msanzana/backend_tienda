@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\TrabajadorController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UsuarioController;
-use App\Models\Trabajadores;
+use App\Http\Controllers\Api\SucursalController;
+use App\Http\Controllers\Api\TrabajadorController;
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -19,6 +20,6 @@ Route::post('/usuario', [UsuarioController::class, 'store']);
 
 // Rutas de /usuario que requieren autenticación, excepto POST
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('/usuario', UsuarioController::class)->except(['store']);
     Route::resource('/trabajador', TrabajadorController::class);
+    Route::resource('/sucursales', SucursalController::class);
 });

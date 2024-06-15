@@ -9,13 +9,16 @@ use App\Models\Trabajadores;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:api');
+});
 
 Route::post('/register', [UserController::class, 'createUser']);
 Route::post('/login', [UserController::class, 'loginUser']);
 
-//Route::group(['middleware' => ['auth:api']], function() {
+// Permitir POST en /usuario sin autenticación
+Route::post('/usuario', [UsuarioController::class, 'store']);
+
+// Rutas de /usuario que requieren autenticación, excepto POST
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource('/usuario', UsuarioController::class);
-    Route::Resource('/trabajador',TrabajadorController::class);
+    Route::resource('/usuario', UsuarioController::class)->except(['store']);
+    Route::resource('/trabajador', TrabajadorController::class);
 });

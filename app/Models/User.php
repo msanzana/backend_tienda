@@ -45,4 +45,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function userHasClientes()
+    {
+        return $this->hasOne('App\Models\UserHasClientes','user_id','id');
+    }
+    public function userHasTrabajadores()
+    {
+        return $this->hasOne('App\Models\UserHasTrabajadores','user_id','id');
+    }
 }

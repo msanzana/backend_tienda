@@ -84,12 +84,13 @@ class UserController extends Controller
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->with('userHasClientes.cliente','userHasTrabajadores.trabajador')->first();
 
             return response()->json([
                 'status' => true,
                 'message' => 'User Logged In Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                'token' => $user->createToken("API TOKEN")->plainTextToken,
+                'data'  => $user
             ], 200);
 
         } catch (\Throwable $th) {

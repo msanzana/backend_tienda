@@ -41,11 +41,11 @@ class UserHasClientes extends Model
     // Relaciones
     public function user()
     {
-        return $this->hasOne(Usuarios::class,'user_id','id');
+        return $this->hasOne(Usuarios::class,'id','user_id');
     }
     public function cliente()
     {
-        return $this->hasOne(Clientes::class,'cliente_id','id');
+        return $this->hasOne(Clientes::class,'id','cliente_id');
     }
 
 }

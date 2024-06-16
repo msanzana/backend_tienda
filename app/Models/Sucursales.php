@@ -19,7 +19,7 @@ class Sucursales extends Model
     {
         if(!is_null($id))
         {
-            return $query->where('id',$query);
+            return $query->where('id',$id);
         }
         return $query;
     }

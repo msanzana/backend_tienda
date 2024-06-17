@@ -17,7 +17,7 @@ class TrabajadoresHasSucursales extends Model
     {
         if(!is_null($sucursalId))
         {
-            return $query->where('sucursa_id',$sucursalId);
+            return $query->where('sucursal_id',$sucursalId);
         }
         return $query;
     }
@@ -32,10 +32,10 @@ class TrabajadoresHasSucursales extends Model
     // Relaciones
     public function sucursal()
     {
-        return $this->hasMany('App\Models\Sucursales','sucursal_id');
+        return $this->hasMany('App\Models\Sucursales','id','sucursal_id');
     }
     public function trabajador()
     {
-        return $this->hasMany('App\Models\Trabajadores','trabajador_id');
+        return $this->hasMany('App\Models\Trabajadores','id','trabajador_id');
     }
 }

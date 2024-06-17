@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\SucursalController;
 use App\Http\Controllers\Api\TrabajadorController;
+use App\Http\Controllers\Api\SucursalesHasTrabajadoresController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -23,4 +24,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/trabajador', TrabajadorController::class);
     Route::resource('/sucursales', SucursalController::class);
     Route::get('/usuario', [UsuarioController::class, 'index']);
+    Route::resource('/sucursales_trabajadores', SucursalesHasTrabajadoresController::class);
 });

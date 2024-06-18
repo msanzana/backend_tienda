@@ -19,6 +19,7 @@ class TrabajadorController extends Controller
                                     ->id($request->id)
                                     ->nombre($request->nombre)
                                     ->admin($request->admin)
+                                    ->activo($request->activo)
                                     ->get();
         return $trabajador;
     }
@@ -43,6 +44,7 @@ class TrabajadorController extends Controller
                 DB::beginTransaction();
                 $trabajador = new Trabajadores();
                 $trabajador->nombre = $request->nombre;
+                $trabajador->activo = 1;
                 $trabajador->save();
                 $trabajadorId = $trabajador->id;
                 if(isset($request->sucursal))
@@ -96,6 +98,7 @@ class TrabajadorController extends Controller
                 $trabajador = Trabajadores::where('id','=',$id)->first();
                 $trabajador->nombre = $request->nombre;
                 $trabajador->admin = $request->admin;
+                $trabajador->activo = $request->activo;
                 $trabajador->save();
                 if(isset($request->sucursal))
                 {
@@ -130,11 +133,12 @@ class TrabajadorController extends Controller
     {
         try {
             DB::beginTransaction();
-            TrabajadoresHasSucursales::where('trabajador_id','=',$id)->delete();
-            Trabajadores::where('id','=',$id)->delete();
+            $trabajador=Trabajadores::where('id','=',$id)->first();
+            $trabajador->activo = 0;
+            $trabajador->save();
             DB::commit();
             return [
-                'mensaje' =>'trabajador eliminado'
+                'mensaje' =>'trabajador desactivado'
             ];
         } catch (Exception $e) {
             DB::rollBack();

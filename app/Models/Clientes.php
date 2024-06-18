@@ -29,4 +29,12 @@ class Clientes extends Model
         }
         return $query;
     }
+    public function scopeActivo($query, $activo)
+    {
+        if(!is_null($activo))
+        {
+            return $query->where('activo',$activo);
+        }
+        return $query;
+    }
 }

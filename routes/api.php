@@ -4,6 +4,7 @@ use App\Models\Proveedores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\SucursalController;
 use App\Http\Controllers\Api\TrabajadorController;
@@ -27,4 +28,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/usuario', [UsuarioController::class, 'index']);
     Route::resource('/proveedores',ProveedoresController::class);
     Route::resource('/sucursales_trabajadores', SucursalesHasTrabajadoresController::class);
+    Route::resource('/clientes',ClienteController::class);
 });

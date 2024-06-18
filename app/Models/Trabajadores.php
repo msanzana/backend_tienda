@@ -37,6 +37,14 @@ class Trabajadores extends Model
         }
         return $query;
     }
+    public function scopeActivo($query, $activo)
+    {
+        if(!is_null($activo))
+        {
+            return $query->where('activo',$activo);
+        }
+        return $query;
+    }
     //Relaciones
     public function sucursalesHasTrabajadores()
     {

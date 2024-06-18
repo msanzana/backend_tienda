@@ -77,8 +77,8 @@ class SucursalController extends Controller
             $sucursales = Sucursales::where('id','=',$id)->first();
             $sucursales->activo=0;
             $sucursales->save();
-            return ['mensaje'   =>  'Sucursal desactivada'];
             DB::commit();
+            return ['mensaje'   =>  'Sucursal desactivada'];
         } catch (Exception $e) {
             DB::rollback();
             throw $e;

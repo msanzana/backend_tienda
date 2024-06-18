@@ -76,7 +76,7 @@ class CargosController extends Controller
         } else {
             try {
                 DB::beginTransaction();
-                $cargo = Cargos::where('id','=',$id);
+                $cargo = Cargos::where('id','=',$id)->first();
                 $cargo->nombre = $request->nombre;
                 $cargo->save();
                 $cargoId = $cargo->id;
@@ -86,7 +86,7 @@ class CargosController extends Controller
                 ]);
                 DB::commit();
                 return response([
-                    'mensaje'   => 'Cargo creado',
+                    'mensaje'   => 'Cargo modificado',
                     'data'      =>  $this->index($filtro)
                 ],200);
             } catch (Exception $e) {

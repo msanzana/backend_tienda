@@ -11,7 +11,8 @@ class Proveedores extends Model
     protected $table='proveedores';
     protected $primaryKey = 'id';
     protected $fillable = ['id',
-                           'nombre'];
+                           'nombre',
+                           'activo'];
     public $timestamps = false;
     public function scopeId($query, $id)
     {
@@ -26,6 +27,14 @@ class Proveedores extends Model
         if(!is_null($nombre))
         {    
             return $query->where('nombre', 'LIKE','%'.$nombre.'%');
+        }
+        return $query;
+    }
+    public function scopeActivo($query, $activo)
+    {
+        if(!is_null($activo))
+        {    
+            return $query->where('activo', $activo);
         }
         return $query;
     }

@@ -3,36 +3,37 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
-use App\Models\Proveedores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\TrabajadoresHasCargo;
 use Illuminate\Support\Facades\Validator;
 
-class ProveedoresController extends Controller
+class TrabajadoresHasCargoController extends Controller
 {
+
     public function index(Request $request)
     {
-        $proveedores = Proveedores::id($request->id)
-                                ->nombre($request->nombre)
-                                ->activo($request->activo)
-                                ->get();
-        return $proveedores; 
+        $trabajadoresHasCargo = TrabajadoresHasCargo::with('trabajador',
+                                                           'cargo')
+                                                     ->trabajadorId($request->trabajador_id)
+                                                     ->cargoId($request->cargo_id)
+                                                     ->get();
+        return $trabajadoresHasCargo; 
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre'      =>  'required|max:50|String',
-            'activo'      =>  'required|int',
-
+            'trabajador_id' =>  'required|int',
+            'cargo_id'      =>  'required|int',
         ]);
         if ($validator->fails()) {
             return response(
                 [
                     'message' => $validator->errors()->all(),
-                    'file' => "ProveedoresController.php",
-                    'method' => "crearProveedor"
+                    'file' => "TrabadoresHsaCargoController.php",
+                    'method' => "crearTrabajadorHasCargo"
                 ],
                 500
             )
@@ -40,17 +41,17 @@ class ProveedoresController extends Controller
         } else {
             try {
                 DB::beginTransaction();
-                $proveedor = new Proveedores();
-                $proveedor->nombre = $request->nombre;
-                $proveedor->activo = 1;
-                $proveedor->save();
-                $proveedorId = $proveedor->id;
+                $tabajadorHasCargo = new TrabajadoresHasCargo();
+                $tabajadorHasCargo->trabajador_id = $request->trabajador_id;
+                $tabajadorHasCargo->cargo_id = $request->cargo_id;
+                $tabajadorHasCargo->save();
+                $trabajadorId = $tabajadorHasCargo->id;
                 $filtro = request::create('','GET',[
-                    'id'     =>  $proveedorId,
+                    'trabajador_id'     =>  $trabajadorId
                 ]);
                 DB::commit();
                 return response([
-                    'mensaje'   => 'Proveedor creado',
+                    'mensaje'   => 'Trabajador Has Cargo creado',
                     'data'      =>  $this->index($filtro)
                 ],200);
             } catch (Exception $e) {
@@ -64,16 +65,15 @@ class ProveedoresController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'nombre'      =>  'required|max:50|String',
-            'activo'      =>  'required|int',
-
+            'trabajador_id' =>  'required|int',
+            'cargo_id'      =>  'required|int',
         ]);
         if ($validator->fails()) {
             return response(
                 [
                     'message' => $validator->errors()->all(),
-                    'file' => "ProveedoresController.php",
-                    'method' => "crearProveedor"
+                    'file' => "TrabadoresHsaCargoController.php",
+                    'method' => "editarTrabajadorHasCargo"
                 ],
                 500
             )
@@ -81,17 +81,17 @@ class ProveedoresController extends Controller
         } else {
             try {
                 DB::beginTransaction();
-                $proveedor = Proveedores::where('id','=',$id)->first();
-                $proveedor->nombre = $request->nombre;
-                $proveedor->activo = 1;
-                $proveedor->save();
-                $proveedorId = $id;
+                $tabajadorHasCargo = TrabajadoresHasCargo::where('trabajador_id',$id)->first();
+                $tabajadorHasCargo->trabajador_id = $request->trabajador_id;
+                $tabajadorHasCargo->cargo_id = $request->cargo_id;
+                $tabajadorHasCargo->save();
+                $trabajadorId = $id;
                 $filtro = request::create('','GET',[
-                    'id'     =>  $proveedorId,
+                    'trabajador_id'     =>  $trabajadorId
                 ]);
                 DB::commit();
                 return response([
-                    'mensaje'   => 'Proveedor modificado',
+                    'mensaje'   => 'Trabajador Has Cargo modificado',
                     'data'      =>  $this->index($filtro)
                 ],200);
             } catch (Exception $e) {
@@ -104,18 +104,6 @@ class ProveedoresController extends Controller
 
     public function destroy(string $id)
     {
-        try {
-            DB::beginTransaction();
-            $proveedor = Proveedores::where('id','=',$id)->first();
-            $proveedor->activo =0;
-            $proveedor->save();
-            DB::commit();
-            return [
-                'mensaje' =>'Proveedor desactivado'
-            ];
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+
     }
 }

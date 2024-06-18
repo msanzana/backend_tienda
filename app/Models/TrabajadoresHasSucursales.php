@@ -25,7 +25,7 @@ class TrabajadoresHasSucursales extends Model
     {
         if(!is_null($trabajadorId))
         {
-            return $query->where('trabador_id',$trabajadorId);
+            return $query->where('trabajador_id',$trabajadorId);
         }
         return $query;
     }

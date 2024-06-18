@@ -50,4 +50,8 @@ class Trabajadores extends Model
     {
         return $this->belongsToMany('App\Models\Sucursales','sucursales_has_trabajadores','trabajador_id','sucursal_id');
     }
+    public function cargosHasTrabajadores()
+    {
+        return $this->belongsToMany('App\Models\Cargos','trabajadores_has_cargo','trabajador_id','cargo_id');
+    }
 }

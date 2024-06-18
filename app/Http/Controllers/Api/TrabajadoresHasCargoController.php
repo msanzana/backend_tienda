@@ -32,7 +32,7 @@ class TrabajadoresHasCargoController extends Controller
             return response(
                 [
                     'message' => $validator->errors()->all(),
-                    'file' => "TrabadoresHsaCargoController.php",
+                    'file' => "TrabajadoresHsaCargoController.php",
                     'method' => "crearTrabajadorHasCargo"
                 ],
                 500
@@ -72,7 +72,7 @@ class TrabajadoresHasCargoController extends Controller
             return response(
                 [
                     'message' => $validator->errors()->all(),
-                    'file' => "TrabadoresHsaCargoController.php",
+                    'file' => "TrabajadoresHasCargoController.php",
                     'method' => "editarTrabajadorHasCargo"
                 ],
                 500

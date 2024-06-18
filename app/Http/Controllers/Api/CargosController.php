@@ -3,22 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
-use App\Models\Clientes;
+use App\Models\Cargos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class ClienteController extends Controller
+class CargosController extends Controller
 {
-    public function index(request $object)
+
+    public function index(Request $request)
     {
-        $clientes = Clientes::id($object->id)
-                         ->nombre($object->nombre)
-                         ->activo($object->activo)
-                         ->get();
-        return $clientes;
+        $cargo = Cargos::id($request->id)
+                    ->nombre($request->nombre)
+                    ->get();
+        return $cargo;
     }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -28,8 +29,8 @@ class ClienteController extends Controller
             return response(
                 [
                     'message' => $validator->errors()->all(),
-                    'file' => "ClientesController.php",
-                    'method' => "crearCliente"
+                    'file' => "CargoController.php",
+                    'method' => "crearCargo"
                 ],
                 500
             )
@@ -37,28 +38,26 @@ class ClienteController extends Controller
         } else {
             try {
                 DB::beginTransaction();
-                $cliente = new Clientes();
-                $cliente->nombre = $request->nombre;
-                $cliente->activo = 1;
-                $cliente->save();
-                $clienteId = $cliente->id;
+                $cargo = new Cargos();
+                $cargo->nombre = $request->nombre;
+                $cargo->save();
+                $cargoId = $cargo->id;
                 $filtro = request::create('','GET',[
-                    'id'     =>  $clienteId,
+                    'id'     =>  $cargoId,
                     'nombre' => null,
-
                 ]);
                 DB::commit();
                 return response([
-                    'mensaje'   => 'Cliente creado',
+                    'mensaje'   => 'Cargo creado',
                     'data'      =>  $this->index($filtro)
                 ],200);
             } catch (Exception $e) {
                 DB::rollBack();
                 throw $e;
             }
-
         }
     }
+
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
@@ -68,8 +67,8 @@ class ClienteController extends Controller
             return response(
                 [
                     'message' => $validator->errors()->all(),
-                    'file' => "ClientesController.php",
-                    'method' => "ModificarCliente"
+                    'file' => "CargoController.php",
+                    'method' => "moificarCargo"
                 ],
                 500
             )
@@ -77,41 +76,23 @@ class ClienteController extends Controller
         } else {
             try {
                 DB::beginTransaction();
-                $cliente = Clientes::where('id','=',$id)->first();
-                $cliente->nombre = $request->nombre;
-                $cliente->activo = $request->activo;
-                $cliente->save();
+                $cargo = Cargos::where('id','=',$id);
+                $cargo->nombre = $request->nombre;
+                $cargo->save();
+                $cargoId = $cargo->id;
                 $filtro = request::create('','GET',[
-                    'id'     =>  $id,
+                    'id'     =>  $cargoId,
                     'nombre' => null,
-
                 ]);
                 DB::commit();
                 return response([
-                    'mensaje'   => 'Cliente modificado',
+                    'mensaje'   => 'Cargo creado',
                     'data'      =>  $this->index($filtro)
                 ],200);
             } catch (Exception $e) {
                 DB::rollBack();
                 throw $e;
             }
-
-        }
-    }
-    public function destroy(string $id)
-    {
-        try {
-            DB::beginTransaction();
-            $cliente = Clientes::where('id','=',$id)->first();
-            $cliente->activo =0;
-            $cliente->save();
-            DB::commit();
-            return [
-                'mensaje' =>'Cliente desactivado'
-            ];
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
         }
     }
 }

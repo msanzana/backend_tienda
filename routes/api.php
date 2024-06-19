@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CargosController;
 use App\Http\Controllers\Api\ClienteController;
 use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\SucursalController;
+use App\Http\Controllers\Api\ProductosController;
 use App\Http\Controllers\Api\TrabajadorController;
 use App\Http\Controllers\Api\ProveedoresController;
 use App\Http\Controllers\Api\SucursalesHasTrabajadoresController;
@@ -30,4 +31,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/sucursales_trabajadores', SucursalesHasTrabajadoresController::class);
     Route::resource('/clientes',ClienteController::class);
     Route::resource('/cargos',CargosController::class);
+    Route::resource('/productos', ProductosController::class);
 });

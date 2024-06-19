@@ -83,7 +83,7 @@ class ProveedoresController extends Controller
                 DB::beginTransaction();
                 $proveedor = Proveedores::where('id','=',$id)->first();
                 $proveedor->nombre = $request->nombre;
-                $proveedor->activo = 1;
+                $proveedor->activo = $request->activo;
                 $proveedor->save();
                 $proveedorId = $id;
                 $filtro = request::create('','GET',[

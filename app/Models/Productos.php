@@ -56,6 +56,7 @@ class Productos extends Model
                         ->select('productos.id',
                                  'productos.nombre',
                                  'productos.precio_venta',
+                                 'productos.URL_imagen',
                                  'productos.activo');
 
         }

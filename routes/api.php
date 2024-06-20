@@ -21,11 +21,11 @@ Route::post('/login', [UserController::class, 'loginUser']);
 
 // Permitir POST en /usuario sin autenticación
 Route::post('/usuario', [UsuarioController::class, 'store']);
+Route::resource('/sucursales', SucursalController::class);
 
 // Rutas de /usuario que requieren autenticación, excepto POST
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/trabajador', TrabajadorController::class);
-    Route::resource('/sucursales', SucursalController::class);
     Route::get('/usuario', [UsuarioController::class, 'index']);
     Route::resource('/proveedores',ProveedoresController::class);
     Route::resource('/sucursales_trabajadores', SucursalesHasTrabajadoresController::class);

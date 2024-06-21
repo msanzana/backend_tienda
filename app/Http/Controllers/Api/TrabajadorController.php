@@ -54,7 +54,7 @@ class TrabajadorController extends Controller
                 if(isset($request->sucursal))
                 {
                     foreach($request->sucursal AS $item)
-                    {   error_log(json_encode($item));
+                    {
                         $sucursalesTrabajadores = new TrabajadoresHasSucursales();
                         $sucursalesTrabajadores->sucursal_id = $item['sucursal_id'];
                         $sucursalesTrabajadores->trabajador_id = $trabajadorId;
@@ -66,12 +66,12 @@ class TrabajadorController extends Controller
                     TrabajadoresHasCargo::where('trabajador_id','=',$trabajadorId)->delete();
 
                     foreach($request->trabajadores_has_cargo AS $item)
-                    {   error_log(json_encode($item));
+                    {
                         $sucursalesTrabajadores = new TrabajadoresHasCargo();
                         $sucursalesTrabajadores->cargo_id = $item['cargo_id'];
                         $sucursalesTrabajadores->trabajador_id = $trabajadorId;
                         $sucursalesTrabajadores->save();
-                    }                    
+                    }
                 }
                 $filtro = request::create('/','GET',[
                     'id'     =>  $trabajadorId,
@@ -93,7 +93,7 @@ class TrabajadorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nombre'      =>  'required|max:50|String',
-            'activo'      =>  'required|int,',
+            'activo'      =>  'required|int',
             'sucursal'    =>  'required|array',
             'trabajadores_has_cargo'    => 'required|array'
 
@@ -121,7 +121,7 @@ class TrabajadorController extends Controller
                     TrabajadoresHasSucursales::where('trabajador_id','=',$id)->delete();
 
                     foreach($request->sucursal AS $item)
-                    {   error_log(json_encode($item));
+                    {
                         $sucursalesTrabajadores = new TrabajadoresHasSucursales();
                         $sucursalesTrabajadores->sucursal_id = $item['sucursal_id'];
                         $sucursalesTrabajadores->trabajador_id = $id;
@@ -133,17 +133,17 @@ class TrabajadorController extends Controller
                     TrabajadoresHasCargo::where('trabajador_id','=',$id)->delete();
 
                     foreach($request->trabajadores_has_cargo AS $item)
-                    {   error_log(json_encode($item));
+                    {
                         $sucursalesTrabajadores = new TrabajadoresHasCargo();
                         $sucursalesTrabajadores->cargo_id = $item['cargo_id'];
                         $sucursalesTrabajadores->trabajador_id = $id;
                         $sucursalesTrabajadores->save();
-                    }                    
+                    }
                 }
                 $filtro = request::create('/trabajador','GET',[
                     'id'     =>  $id,
                     'nombre' => null,
-                    'admin'  => null        
+                    'admin'  => null
                 ]);
                 DB::commit();
                 return response([

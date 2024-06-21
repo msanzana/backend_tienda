@@ -72,7 +72,7 @@ class ProductosController extends Controller
                         $sucursalesHasProductos = new SucursalesHasProductos();
                         $sucursalesHasProductos->sucursal_id = $item['sucursal_id'];
                         $sucursalesHasProductos->producto_id = $productoId ;
-                        $sucursalesHasProductos->stock = 0;    
+                        $sucursalesHasProductos->stock = 0;
                         $sucursalesHasProductos->save();
                     }
                 }
@@ -133,13 +133,13 @@ class ProductosController extends Controller
                 }
                 if(isset($request->sucursales_has_productos))
                 {
-                    SucursalesHasProductos::where('producto_id','=', $productoId)->delete();    
+                    SucursalesHasProductos::where('producto_id','=', $productoId)->delete();
                     foreach($request->sucursales_has_productos AS $item)
                     {
                         $sucursalesHasProductos = new SucursalesHasProductos();
                         $sucursalesHasProductos->sucursal_id = $item['sucursal_id'];
                         $sucursalesHasProductos->producto_id = $productoId ;
-                        $sucursalesHasProductos->stock = 0;    
+                        $sucursalesHasProductos->stock = 0;
                         $sucursalesHasProductos->save();
                     }
                 }

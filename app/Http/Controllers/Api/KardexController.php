@@ -19,8 +19,8 @@ class KardexController extends Controller
                         ->correlativo($request->correlativo)
                         ->productoId($request->producto_id)
                         ->sucursalId($request->sucursal_id)
-                        ->gety();
-         return $kardex;     
+                        ->get();
+         return $kardex;
     }
 
 }

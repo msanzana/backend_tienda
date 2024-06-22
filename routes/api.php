@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VentaController;
 use App\Http\Controllers\Api\CargosController;
 use App\Http\Controllers\Api\CompraController;
 use App\Http\Controllers\Api\KardexController;
@@ -36,4 +37,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/productos', ProductosController::class);
     Route::resource('/compras',CompraController::class);
     Route::resource('/kardex', KardexController::class);
+    Route::resource('/ventas',VentaController::class);
 });

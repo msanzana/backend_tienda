@@ -4,46 +4,46 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 use App\Models\Kardex;
-use App\Models\Compras;
+use App\Models\Ventas;
 use Illuminate\Http\Request;
-use App\Models\ComprasDetalle;
+use App\Models\VentasDetalle;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\SucursalesHasProductos;
 use Illuminate\Support\Facades\Validator;
 
-class CompraController extends Controller
+class VentaController extends Controller
 {
     public function index(Request $request)
     {
-        $compra = Compras::with('trabajador',
-                                'sucursal',
-                                'proveedor',
-                                'detalle.producto')
-                         ->id($request->id)
-                         ->fecha($request->fecha)
-                         ->trabajadorId($request->trabajador_id)
-                         ->sucursalId($request->sucursal_id)
-                         ->total($request->total)
-                         ->get();
-        return $compra;
+        $ventas = Ventas::with('cliente',
+                               'sucursal',
+                               'ventaDetalle')
+                    ->id($request->id)
+                    ->fecha($request->fecha)
+                    ->clienteId($request->cliente_id)
+                    ->sucursalId($request->scuursal_id)
+                    ->total($request->total)
+                    ->get();
+        return $ventas;
     }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'fecha'             =>  'required|String',
-            'trabajador_id'     =>  'required|int',
-            'proveedor_id'      =>  'required|int',
-            'sucursal_id'       =>  'required|int',
-            'compras_detalle'   =>  'required|array'
+            'fecha'            =>  'required|String',
+            'cliente_id'       =>  'required|int',
+            'sucursal_id'      =>  'required|int',
+            'total'            =>  'required|int',
+            'ventas_detalle'   =>  'required|array'
 
         ]);
         if ($validator->fails()) {
             return response(
                 [
                     'message' => $validator->errors()->all(),
-                    'file' => "CompraController.php",
-                    'method' => "crearCompra"
+                    'file' => "VentaController.php",
+                    'method' => "crearVenta"
                 ],
                 500
             )
@@ -51,26 +51,25 @@ class CompraController extends Controller
         } else {
             try {
                 DB::beginTransaction();
-                $compra = new Compras();
-                $compra->fecha = $request->fecha;
-                $compra->trabajador_id = $request->trabajador_id;
-                $compra->proveedor_id = $request->proveedor_id;
-                $compra->sucursal_id = $request->sucursal_id;
-                $compra->total = $request->total;
-                $compra->save();
-                $compraId = $compra->id;
-                if(isset($request->compras_detalle))
+                $venta = new Ventas();
+                $venta->fecha = $request->fecha;
+                $venta->cliente_id = $request->cliente_id;
+                $venta->sucursal_id = $request->sucursal_id;
+                $venta->total = $request->total;
+                $venta->save();
+                $ventaId = $venta->id;
+                if(isset($request->ventas_detalle))
                 {
-                    foreach($request->compras_detalle AS $item)
+                    foreach($request->ventas_detalle AS $item)
                     {
                         $cantidadActual = 0;
                         $cantidadNueva = 0;
-                        $compraDetalle = new ComprasDetalle();
-                        $compraDetalle->compra_id = $compraId;
-                        $compraDetalle->producto_id = $item['producto_id'];
-                        $compraDetalle->cantidad = $item['cantidad'];
-                        $compraDetalle->total = $item['total'];
-                        $compraDetalle->save();
+                        $ventaDetalle = new VentasDetalle();
+                        $ventaDetalle->venta_id = $ventaId;
+                        $ventaDetalle->producto_id = $item['producto_id'];
+                        $ventaDetalle->cantidad = $item['cantidad'];
+                        $ventaDetalle->total = $item['total'];
+                        $ventaDetalle->save();
 
                         // obtener stock actual producto
                         $stockProducto = SucursalesHasProductos::where('sucursal_id','=',$request->sucursal_id)
@@ -79,7 +78,7 @@ class CompraController extends Controller
 
                         if(is_null($stockProducto))
                         {
-                            $cantidadActual =0;
+                            $cantidadActual = 0;
                             $cantidadNueva = $item['cantidad'];
                             $nuevoStock = new SucursalesHasProductos();
                             $nuevoStock->producto_id = $item['producto_id'];
@@ -93,15 +92,15 @@ class CompraController extends Controller
                                                                     ->where('producto_id','=',$item['producto_id'])
                                                                     ->first();
                             $cantidadActual = $stockProducto->stock;
-                            $cantidadNueva = $stockProducto->stock + $item['cantidad'];
-                            $stockProducto->stock +=  $item['cantidad'];
+                            $cantidadNueva = $stockProducto->stock - $item['cantidad'];
+                            $stockProducto->stock -=  $item['cantidad'];
                             $stockProducto->save();
                         }
                         // Kardex Entrada
                         $kardex = new Kardex();
                         $kardex->fecha = $request->fecha;
-                        $kardex->modulo_id = 1; // compra
-                        $kardex->correlativo = $compraId;
+                        $kardex->modulo_id = 2; // compra
+                        $kardex->correlativo = $ventaId;
                         $kardex->producto_id = $item['producto_id'];
                         $kardex->sucursal_id = $request->sucursal_id;
                         $kardex->cantidad_actual = $cantidadActual;
@@ -111,11 +110,11 @@ class CompraController extends Controller
                     }
                 }
                 $filtro = request::create('','GET',[
-                    'id'     =>  $compraId,
+                    'id'     =>  $ventaId,
                 ]);
                 DB::commit();
                 return response([
-                    'mensaje'   => 'Compra Ingresada',
+                    'mensaje'   => 'Venta Ingresada',
                     'data'      =>  $this->index($filtro)
                 ],200);
             } catch (Exception $e) {
@@ -124,8 +123,5 @@ class CompraController extends Controller
             }
         }
     }
-    public function destroy(string $id)
-    {
-
-    }
+    
 }

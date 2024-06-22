@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CargosController;
 use App\Http\Controllers\Api\CompraController;
 use App\Http\Controllers\Api\KardexController;
 use App\Http\Controllers\Api\ClienteController;
+use App\Http\Controllers\Api\InventarioController;
 use App\Http\Controllers\Api\UsuarioController;
 use App\Http\Controllers\Api\SucursalController;
 use App\Http\Controllers\Api\ProductosController;
@@ -38,4 +39,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/compras',CompraController::class);
     Route::resource('/kardex', KardexController::class);
     Route::resource('/ventas',VentaController::class);
+    Route::resource('/inventario',InventarioController::class);
 });

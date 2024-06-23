@@ -27,6 +27,7 @@ class InventarioController extends Controller
                                                   (SELECT IFNULL(SUM(kar.nueva_cantidad),0) FROM kardex AS kar WHERE kar.fecha = '.$request->fecha.' AND kar.producto_id = kard.id AND kar.modulo_id = 2)
                                               ) AS saldo'))
                             ->whereIN('kard.sucursal_id',$request->sucursal)
+                            ->where('kard.fecha','=',$request->fecha)
                             ->groupBy('kard.fecha')
                             ->get();
 

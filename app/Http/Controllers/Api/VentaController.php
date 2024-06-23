@@ -64,6 +64,7 @@ class VentaController extends Controller
                     {
                         $cantidadActual = 0;
                         $cantidadNueva = 0;
+                        $stockProducto = null;
                         $ventaDetalle = new VentasDetalle();
                         $ventaDetalle->venta_id = $ventaId;
                         $ventaDetalle->producto_id = $item['producto_id'];
@@ -123,5 +124,5 @@ class VentaController extends Controller
             }
         }
     }
-    
+
 }

@@ -79,6 +79,7 @@ class VentaController extends Controller
 
                         if(is_null($stockProducto))
                         {
+                            error_log('prueba_locura');
                             $cantidadActual = 0;
                             $cantidadNueva = $item['cantidad'];
                             $nuevoStock = new SucursalesHasProductos();
@@ -89,13 +90,15 @@ class VentaController extends Controller
                         }
                         else
                         {
-                            $stockProducto = SucursalesHasProductos::where('sucursal_id','=',$request->sucursal_id)
-                                                                    ->where('producto_id','=',$item['producto_id'])
-                                                                    ->first();
                             $cantidadActual = $stockProducto->stock;
                             $cantidadNueva = $stockProducto->stock - $item['cantidad'];
-                            $stockProducto->stock -=  $item['cantidad'];
-                            $stockProducto->save();
+                            $stockProductoCompra = SucursalesHasProductos::whereRaw('sucursal_id='.$request->sucursal_id.' AND producto_id='.$item['producto_id'])
+                                                                         ->first();
+                            if($stockProductoCompra)
+                            {
+                                $stockProductoCompra->stock -=  $item['cantidad'];
+                                $stockProductoCompra->save();
+                            }
                         }
                         // Kardex Entrada
                         $kardex = new Kardex();

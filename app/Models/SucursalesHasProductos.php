@@ -9,11 +9,20 @@ class SucursalesHasProductos extends Model
 {
     use HasFactory;
     protected $table = 'sucursales_has_productos';
-    protected $primaryKey = 'sucursal_id';
-    protected $fillable =['sucursal_id',
+    protected $primaryKey = 'id';
+    protected $fillable =['id',
+                          'sucursal_id',
                           'producto_id',
                           'stock'];
     public $timestamps = false;
+    public function scopeId($query, $id)
+    {
+        if(!is_null($id))
+        {
+            return $query->where('id', $id);
+        }
+        return $query;
+    }
     public function scopeSucursalId($query, $sucursalId)
     {
         if(!is_null($sucursalId))

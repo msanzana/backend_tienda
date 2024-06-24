@@ -22,6 +22,7 @@ class TrabajadorController extends Controller
                                     ->nombre($request->nombre)
                                     ->admin($request->admin)
                                     ->activo($request->activo)
+                                    ->sucursalId($request->sucursal_id)
                                     ->get();
         return $trabajador;
     }

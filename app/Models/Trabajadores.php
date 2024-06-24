@@ -11,7 +11,9 @@ class Trabajadores extends Model
     protected $table = 'trabajadores';
     protected $primaryKey = 'id';
     protected $fillable = ['id',
-                           'nombre'];
+                           'admin',
+                           'nombre',
+                           'activo'];
     public $timestamps = false;
     public function scopeId($query, $id)
     {
@@ -42,6 +44,20 @@ class Trabajadores extends Model
         if(!is_null($activo))
         {
             return $query->where('activo',$activo);
+        }
+        return $query;
+    }
+    public function scopeSucursalid($query, $sucursalId)
+    {
+        if(!is_null($sucursalId))
+        {
+            return $query->where('sucu.id','=',$sucursalId)
+                          ->join('sucursales_has_trabajadores AS sutr','sutr.trabajador_id','=','trabajadores.id')
+                          ->join('sucursales as sucu','sucu.id','=','sutr.sucursal_id')
+                          ->select('trabajadores.id',
+                                   'trabajadores.nombre',
+                                   'trabajadores.admin',
+                                   'trabajadores.activo');
         }
         return $query;
     }
